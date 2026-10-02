@@ -6,15 +6,16 @@
 class Particle
 {
 public:
-	Particle(Vector3 Pos, Vector3 Vel);
+	Particle(Vector3 Pos, Vector3 Vel, Vector3 Acc, float Mass);
 	~Particle();
 
 	void integrate(double t);
 
 private:
-	Vector3 vel;
-	physx::PxTransform pos;
-	RenderItem* renderItem;
-	float mass;
+	Vector3 vel; // Velocidad
+	Vector3 acc; // Aceleración
+	physx::PxTransform pos; // Posición Y Rotacion
+	RenderItem* renderItem; // Rederer
+	float mass; // Masa
 };
 
