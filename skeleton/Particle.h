@@ -6,7 +6,7 @@
 class Particle
 {
 public:
-	Particle(Vector3 Pos, Vector3 Vel, Vector3 Acc, float Mass);
+	Particle(Vector3 Pos, Vector3 Vel, Vector3 Acc, float Mass, float Damp);
 	~Particle();
 
 	void integrate(double t);
@@ -17,5 +17,6 @@ private:
 	physx::PxTransform pos; // Posición Y Rotacion
 	RenderItem* renderItem; // Rederer
 	float mass; // Masa
+	float damp;
 };
 
