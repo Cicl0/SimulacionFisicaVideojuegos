@@ -1,5 +1,9 @@
 ﻿#include "P0S_Scene.h"
 
+#include <PxPhysicsAPI.h>
+
+using namespace physx;
+
 void P0S_Scene::init() {
 	physx::PxShape* shape = CreateShape(physx::PxSphereGeometry(2.0f));
 	m_transform = physx::PxTransform(physx::PxVec3(0.0f, 0.0f, 0.0f));

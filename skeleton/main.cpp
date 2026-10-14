@@ -24,7 +24,7 @@
 #include "EmptyScene.h"
 #include "P0S_Scene.h"
 
-#include "Particle.h"
+#include "Bullet.h"
 
 #include <foundation/PxSimpleTypes.h>
 #include <PxPhysicsVersion.h> // <- Macros for PhysX version checking
@@ -52,7 +52,7 @@ PxDefaultCpuDispatcher*	gDispatcher = NULL;
 PxScene*				gScene      = NULL;
 ContactReportCallback gContactReportCallback;
 
-Particle* particle = nullptr;
+std::vector<Bullet*> bullets;
 
 // Global variables for physics timing. We use a fixed timestep for physics simulation, and accumulate time to determine when to step the physics simulation.
 double gPhysicsTimeAccumulator = 0.0;
@@ -101,14 +101,19 @@ void initPhysics(bool interactive)
 	sceneDesc.filterShader = contactReportFilterShader;
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 	gScene = gPhysics->createScene(sceneDesc);
+
 	// Registrar las prácticas/escenas del curso
 	SceneManager::instance().registerScene<EmptyScene>("EscenaVacia");
 	SceneManager::instance().registerScene<P0S_Scene>("Escena0");
 	
 	// Cargar la escena inicial
 	SceneManager::instance().changeScene("EscenaVacia");
+	
+	PxRigidStatic* groundPlane = PxCreatePlane(*gPhysics, PxPlane(0.0f, 1.0f, 0.0f, 0.0f), *gMaterial);
+	gScene->addActor(*groundPlane);
 
-	particle = new Particle(Vector3(0.0f, 0.0f, 0.0f), Vector3(5.0f, 0.0f, 0.0f), Vector3(-5.0f, 0.0f, 0.0f), 0, 0.9f);
+	//Bullet* bull = new Bullet(Vector3(0.0f, 0.0f, 0.0f), Vector3(5.0f, 0.0f, 0.0f), Vector3(-5.0f, 0.0f, 0.0f), 0, 0.9f, Vector3(350.0f, 0.0f, 0.0f), 0.008f);
+	//bullets.push_back(bull);
 }
 
 
@@ -136,7 +141,9 @@ void stepPhysics(bool interactive, double t)
 
 		gPhysicsTimeAccumulator -= gFixedTimestep;
 		SceneManager::instance().update(gFixedTimestep);
-		particle->integrate(gFixedTimestep);
+		for (auto bullet : bullets) {
+			bullet->integrate(gFixedTimestep);
+		}
 	}
 }
 
@@ -184,6 +191,10 @@ void cleanupPhysics(bool interactive)
 		gFoundation->release();
 		gFoundation = nullptr;
 	}
+
+	for(auto bullet : bullets) {
+		delete bullet;
+	}
 }
 
 // Function called when a key is pressed
@@ -192,6 +203,15 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	PX_UNUSED(camera);
 
 	SceneManager::instance().keyPress(key, camera);
+
+	if (key == 'k') {
+		Bullet* bull = new Bullet(camera.p, GetCamera()->getDir() * 250.0f, Vector3(0.0f), 0.8f, 1.0f, GetCamera()->getDir() * 350.0f, 0.008f);
+		bullets.push_back(bull);
+	}
+	
+	for (auto bullet : bullets) {
+		bullet->keyPress(key, camera);
+	}
 }
 
 void onCollision(physx::PxActor* actor1, physx::PxActor* actor2)
