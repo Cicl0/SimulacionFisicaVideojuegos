@@ -11,6 +11,8 @@ public:
 	Particle(Vector3 Pos, Vector3 Vel, Vector3 Acc, float Mass, float Damp);
 	~Particle() {}
 
+	virtual void init() = 0;
+
 	virtual void integrate(double t);
 
 	virtual void keyPress(unsigned char key, const physx::PxTransform& cameraTransform) {}

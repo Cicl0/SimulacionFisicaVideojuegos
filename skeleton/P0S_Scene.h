@@ -21,7 +21,7 @@ private:
 	physx::PxTransform m_transform;
 	RenderItem* m_renderItem{ nullptr };
 
-	float simulatedSpeed = 150.0f;
+	float simulatedSpeed = 350.0f;
 	std::vector<Bullet*> bullets;
 };
 

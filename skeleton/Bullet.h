@@ -8,9 +8,14 @@ public:
 	Bullet(Vector3 Pos, Vector3 Vel, Vector3 Acc, float Mass, float Damp, Vector3 VelReal, float MassReal) : 
 		Particle(Pos, Vel, Acc, Mass, Damp),
 		velR(VelReal),
+		velS(Vel),
 		massR(MassReal)
-	{}
+	{
+		init();
+	}
 	~Bullet() {}
+
+	void init() override;
 
 	void integrate(double t) override;
 
@@ -22,6 +27,7 @@ public:
 
 protected:
 	Vector3 velR;
+	Vector3 velS;
 	float massR;
 };
 

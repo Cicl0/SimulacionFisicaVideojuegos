@@ -3,26 +3,37 @@
 #include <cmath>
 #include <iostream>
 
-void Bullet::integrate(double t) {
-	vel += t * (acc); // Calculo velocidad i + 1
+void
+Bullet::init() {
+	simulateMass();
+	simulateGravity();
+}
+
+void 
+Bullet::integrate(double t) {
+	vel += t * (acc + gravity); // Calculo velocidad i + 1
 	vel *= std::pow(damp, t); // Aplicar amortiguamiento
-	simulateGravity(); // Simular gravedad
-	simulateMass(); // Simular masa
-	vel += t * (gravity);
 	pos.p += (t * vel); // Calculo posicion i + 1
-	if (pos.p.y > 0) std::cout << "Bullet y acc: " << pos.p.x << std::endl; // Imprimir altura de la bala
+	if (pos.p.y > 0) {
+		std::cout << "Bullet y acc: " << pos.p.x << std::endl; // Imprimir altura de la bala
+		std::cout << "SimGravity: " << gravity.y << std::endl; // Imprimir gravedad simulada
+	}
 }
 
-void Bullet::keyPress(unsigned char key, const physx::PxTransform& cameraTransform) {
+void 
+Bullet::keyPress(unsigned char key, const physx::PxTransform& cameraTransform) {
 }
 
-void Bullet::simulateMass() {
+void 
+Bullet::simulateMass() {
 	// mass = (massR * Vr2) / Vs2
-	mass = massR * (velR.magnitudeSquared() / vel.magnitudeSquared());
+	mass = massR * (velR.magnitudeSquared() / velS.magnitudeSquared());
 }
 
-void Bullet::simulateGravity() {
+void 
+Bullet::simulateGravity() {
 	// gravity = (Vsm2 * Gr) / Vr2
-	gravity = GRAVITY * (vel.magnitudeSquared() / velR.magnitudeSquared());
+	
+	gravity = GRAVITY * (velS.magnitudeSquared() / velR.magnitudeSquared());
 
 }
