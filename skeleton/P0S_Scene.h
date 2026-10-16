@@ -2,6 +2,7 @@
 
 #include "Scene.h"
 #include "RenderUtils.hpp"
+#include "Bullet.h"
 
 class P0S_Scene : public Scene
 {
@@ -10,10 +11,7 @@ public:
 
 	void init() override;
 
-	void update(double dt) override {
-		// Lógica/Integración del alumno (por ejemplo, movimiento simple)
-		//m_transform.p.y -= static_cast<float>(9.8 * dt);
-	}
+	void update(double dt) override;
 
 	void cleanup() override;
 
@@ -22,5 +20,8 @@ public:
 private:
 	physx::PxTransform m_transform;
 	RenderItem* m_renderItem{ nullptr };
+
+	float simulatedSpeed = 150.0f;
+	std::vector<Bullet*> bullets;
 };
 

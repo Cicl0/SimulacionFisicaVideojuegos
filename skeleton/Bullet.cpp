@@ -14,14 +14,6 @@ void Bullet::integrate(double t) {
 }
 
 void Bullet::keyPress(unsigned char key, const physx::PxTransform& cameraTransform) {
-	switch (key) {
-	case 'u':
-		mass++;
-		break;
-	case'j':
-		mass--;
-		break;
-	}
 }
 
 void Bullet::simulateMass() {
