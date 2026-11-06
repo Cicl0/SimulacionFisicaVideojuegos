@@ -10,11 +10,11 @@ void P0S_Scene::init() {
 
 	m_renderItem = new RenderItem(shape, &m_transform, Vector4(0.0f, 1.0f, 0.0f, 1.0f));
 
-	generator = new Generator(0.1f, 50.0f, 10.0f, 
+	generator = new Generator(0.1f, 30.0f, 10.0f, 
 		Vector3(0.0f, 1.0f, 0.0f), 0.01f, 0.1f, 0.1f, 
 		2.0f, 1.0f, 
 		Vector3(0.0f, 0.0f, 0.0f), 2.0f, 2.0f, 2.0f, 
-		1.0f, 1.0f);
+		1.0f, 1.0f, Vector3(0.0f, -10.0f, 0.0f));
 }
 
 void

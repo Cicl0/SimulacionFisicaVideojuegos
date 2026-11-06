@@ -41,5 +41,5 @@ Generator::generate()
 	float life = (std::max)(0.01f, lifetime_dist(generator));
 
 	particles.push_back(std::make_unique<Particle>(
-		pos, dir * speed, Vector3(0.0f, 0.0f, 0.0f), mass, damp, life));
+		pos, dir * speed, gravity, mass, damp, life));
 }

@@ -10,13 +10,14 @@ public:
 	Generator(float inter, float velMed, float velDev, 
 		Vector3 dir, float dirVarX, float dirVarY, float dirVarZ,
 		float liveMed, float liveDev, Vector3 origin,
-		float varX, float varY, float varZ, float m, float d) :
+		float varX, float varY, float varZ, float m, float d, Vector3 grav) :
 		interval(inter),
 		timeSinceLastGeneration(0.0f),
 		direction(dir.getNormalized()),
 		generator(std::random_device{}()),
 		mass(m),
-		damp(d)
+		damp(d),
+		gravity(grav)
 	{
 		lifetime_dist = std::normal_distribution<float>(liveMed, liveDev);
 		velocity_dist = std::normal_distribution<float>(velMed, velDev);
@@ -56,5 +57,7 @@ private:
 
 	float interval;
 	float timeSinceLastGeneration = 0.0f;
+
+	Vector3 gravity;
 };
 
