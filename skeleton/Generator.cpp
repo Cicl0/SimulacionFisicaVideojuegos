@@ -37,9 +37,13 @@ Generator::generate()
 		direction_dist_Y(generator),
 		direction_dist_Z(generator));
 
+	Vector3 acc(acceleration_dist_X(generator),
+		acceleration_dist_Y(generator),
+		acceleration_dist_Z(generator));
+
 	float speed = (std::max)(0.0f, velocity_dist(generator));
 	float life = (std::max)(0.01f, lifetime_dist(generator));
 
 	particles.push_back(std::make_unique<Particle>(
-		pos, dir * speed, gravity, mass, damp, life));
+		pos, dir * speed, gravity + acc, mass, damp, life));
 }

@@ -10,7 +10,8 @@ public:
 	Generator(float inter, float velMed, float velDev, 
 		Vector3 dir, float dirVarX, float dirVarY, float dirVarZ,
 		float liveMed, float liveDev, Vector3 origin,
-		float varX, float varY, float varZ, float m, float d, Vector3 grav) :
+		float varX, float varY, float varZ, float m, float d, Vector3 grav,
+		Vector3 acc, float accVarX, float accVarY, float accVarZ) :
 		interval(inter),
 		timeSinceLastGeneration(0.0f),
 		direction(dir.getNormalized()),
@@ -25,6 +26,10 @@ public:
 		direction_dist_X = std::normal_distribution<float>(dir.x, dirVarX);
 		direction_dist_Y = std::normal_distribution<float>(dir.y, dirVarY);
 		direction_dist_Z = std::normal_distribution<float>(dir.z, dirVarZ);
+
+		acceleration_dist_X = std::normal_distribution<float>(acc.x, accVarX);
+		acceleration_dist_Y = std::normal_distribution<float>(acc.y, accVarY);
+		acceleration_dist_Z = std::normal_distribution<float>(acc.z, accVarZ);
 
 		position_dist_X = std::normal_distribution<float>(origin.x, varX);
 		position_dist_Y = std::normal_distribution<float>(origin.y, varY);
@@ -41,9 +46,14 @@ private:
 	std::default_random_engine generator;
 	std::normal_distribution<float> lifetime_dist;
 	std::normal_distribution<float> velocity_dist;
+
 	std::normal_distribution<float> direction_dist_X;
 	std::normal_distribution<float> direction_dist_Y;
 	std::normal_distribution<float> direction_dist_Z;
+
+	std::normal_distribution<float> acceleration_dist_X;
+	std::normal_distribution<float> acceleration_dist_Y;
+	std::normal_distribution<float> acceleration_dist_Z;
 
 	std::normal_distribution<float> position_dist_X;
 	std::normal_distribution<float> position_dist_Y;
