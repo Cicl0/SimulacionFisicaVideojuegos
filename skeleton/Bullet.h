@@ -6,7 +6,7 @@ class Bullet : public Particle
 {
 public:
 	Bullet(Vector3 Pos, Vector3 Vel, Vector3 Acc, float Mass, float Damp, Vector3 VelReal, float MassReal) : 
-		Particle(Pos, Vel, Acc, Mass, Damp),
+		Particle(Pos, Vel, Acc, Mass, Damp, -1.0f),
 		velR(VelReal),
 		velS(Vel),
 		massR(MassReal)

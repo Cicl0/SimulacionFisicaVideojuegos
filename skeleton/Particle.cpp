@@ -1,11 +1,13 @@
 ﻿#include "Particle.h"
 #include <cmath> 
 
-Particle::Particle(Vector3 Pos = { 0.0f, 0.0f, 0.0f }, Vector3 Vel = {0.0f, 0.0f, 0.0f}, Vector3 Acc = {0.0f, 0.0f, 0.0f}, float Mass = 0, float Damp = 0) :
+Particle::Particle(Vector3 Pos = { 0.0f, 0.0f, 0.0f }, Vector3 Vel = {0.0f, 0.0f, 0.0f}, Vector3 Acc = {0.0f, 0.0f, 0.0f}, float Mass = 0, float Damp = 0, float Lifetime = -1.0f) :
 	pos(Pos),
 	vel(Vel),
 	acc(Acc),
-	mass(0)
+	mass(0),
+	lifetime(Lifetime),
+	age(0.0f)
 {
 	if (Damp > 1) damp = 1;
 	else if (Damp < 0) damp = 0;
@@ -19,4 +21,11 @@ void Particle::integrate(double t) {
 	vel += t * acc; // Calculo velocidad i + 1
 	vel *= std::pow(damp, t); // Aplicar amortiguamiento
 	pos.p += (t * vel); // Calculo posicion i + 1
+
+	if(lifetime > 0) {
+		age += t;
+		if (age >= lifetime) {
+			alive = false;
+		}
+	}
 }
