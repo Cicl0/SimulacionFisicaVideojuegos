@@ -17,18 +17,35 @@ public:
 
 	virtual void keyPress(unsigned char key, const physx::PxTransform& cameraTransform) {}
 
+	// Devuelve si la particula esta viva o muerta
 	bool isAlive() const { return alive; }
 
-	// gravity = (Vsm2 * Gr) / Vr2
+	// --- Fuerzas ---
+	// Acumula una fuerza (en N) que se aplicará en el próximo integrate().
+	void addForce(const Vector3& f) { 
+		force += f; 
+	}
+
+	// Pone a cero el acumulador (se llama al final de integrate()).
+	void clearForce() { force = Vector3(0.0f, 0.0f, 0.0f); }
+
+	// --- Getters que usan los generadores de fuerzas ---
+	float getMass() const { return mass; }
+	float getInverseMass() const { return (mass > 0.0f) ? 1.0f / mass : 0.0f; }
+	Vector3 getVelocity() const { return vel; }
+	Vector3 getPosition() const { return pos.p; }
 
 protected:
 	Vector3 vel; // Velocidad
 	Vector3 acc; // Aceleración
 	physx::PxTransform pos; // Posición Y Rotacion
+
 	RenderItem* renderItem; // Rederer
+
 	float mass; // Masa
 	float damp;
-	Vector3 gravity;
+
+	Vector3 force = Vector3(0.0f, 0.0f, 0.0f); // Fuerza acumulada en este frame
 
 	float lifetime; // Tiempo de vida de la particula
 	float age; // Edad de la particula

@@ -5,17 +5,18 @@
 using namespace physx;
 
 void P0S_Scene::init() {
-	physx::PxShape* shape = CreateShape(physx::PxSphereGeometry(2.0f));
-	m_transform = physx::PxTransform(physx::PxVec3(0.0f, 0.0f, 0.0f));
+	generator = new Generator(0.01f, 0.0f, 0.001f,		// Intervalo de generación, media y desviación de la velocidad
+		Vector3(0.0f, 0.0f, 0.0f), 0.01f, 0.1f, 0.1f, 	// Dirección y desviación de la dirección
+		-1.0f, 0.01f, 									// Media y desviación de la vida de la partícula
+		Vector3(0.0f, 1.0f, 0.0f), 6.0f, 6.0f, 6.0f, 	// Origen y desviación de la posición
+		10.0f, 0.97f,									// Masa y amortiguamiento
+		Vector3(0.0f), 0.01f, 0.01f, 0.01f,				// Aceleración y desviación de la aceleración
+		50);											// Número de partículas a generar
 
-	m_renderItem = new RenderItem(shape, &m_transform, Vector4(0.0f, 1.0f, 0.0f, 1.0f));
-
-	generator = new Generator(0.1f, 30.0f, 10.0f, 
-		Vector3(0.0f, 1.0f, 0.0f), 0.01f, 0.1f, 0.1f, 
-		2.0f, 1.0f, 
-		Vector3(0.0f, 0.0f, 0.0f), 2.0f, 2.0f, 2.0f, 
-		1.0f, 1.0f, Vector3(0.0f, -10.0f, 0.0f),
-		Vector3(0.0f), 0.01f, 0.01f, 0.01f);
+	explosionForceGenerator = new ExplosionForceGenerator(Vector3(0.0f, 0.0f, 0.0f), 30000.0f, 1000.0f, 1.0f);
+	generator->addForceGenerator(explosionForceGenerator);
+	gravityForceGenerator = new GravityForceGenerator(GRAVITY * 4);
+	generator->addForceGenerator(gravityForceGenerator);
 }
 
 void
@@ -24,6 +25,9 @@ void
 		bullet->integrate(dt);
 	}
 	generator->integrate(dt);
+
+	explosionForceGenerator->updateForce(dt);
+	gravityForceGenerator->updateForce(dt);
 }
 
 void P0S_Scene::cleanup() {
@@ -52,5 +56,12 @@ void P0S_Scene::keyPress(unsigned char key, const physx::PxTransform& cameraTran
 	}
 	if (key == 'j') {
 		simulatedSpeed -= 10.0f;
+	}
+	if (key == 'e') {
+		explosionForceGenerator->trigger();
+		gravityForceGenerator->triggerGravity();
+	}
+	if (key == 'g') {
+		generator->triggerSpawn();
 	}
 }

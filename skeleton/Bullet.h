@@ -29,5 +29,6 @@ protected:
 	Vector3 velR;
 	Vector3 velS;
 	float massR;
+	Vector3 gravity;
 };
 

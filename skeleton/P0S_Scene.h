@@ -4,6 +4,8 @@
 #include "RenderUtils.hpp"
 #include "Bullet.h"
 #include "Generator.h"
+#include "ExplosionForceGenerator.h"
+#include "GravityForceGenerator.h"
 
 class P0S_Scene : public Scene
 {
@@ -25,5 +27,8 @@ private:
 	float simulatedSpeed = 350.0f;
 	std::vector<Bullet*> bullets;
 	Generator* generator;
+	ExplosionForceGenerator* explosionForceGenerator;
+	GravityForceGenerator* gravityForceGenerator;
+
 };
 
