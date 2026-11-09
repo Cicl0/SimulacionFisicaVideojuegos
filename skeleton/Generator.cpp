@@ -47,6 +47,8 @@ Generator::integrate(double t) {
 	// Generar nuevas partículas si ha pasado el intervalo de tiempo
 	if(timeSinceLastGeneration >= interval) {
 		generate();
+		generate();
+		generate();
 		timeSinceLastGeneration = 0.0f;
 	} else {
 		timeSinceLastGeneration += t;

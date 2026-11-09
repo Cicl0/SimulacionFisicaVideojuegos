@@ -6,6 +6,8 @@
 #include "Generator.h"
 #include "ExplosionForceGenerator.h"
 #include "GravityForceGenerator.h"
+#include "WindForceGenerator.h"
+#include "WhirlwindForceGenerator.h"
 
 class P0S_Scene : public Scene
 {
@@ -30,5 +32,7 @@ private:
 	ForceRegistry* forceRegistry;
 	ExplosionForceGenerator* explosionForceGenerator;
 	GravityForceGenerator* gravityForceGenerator;
+	WindForceGenerator* windForceGenerator;
+	WhirlwindForceGenerator* whirlwindForceGenerator;
 };
 

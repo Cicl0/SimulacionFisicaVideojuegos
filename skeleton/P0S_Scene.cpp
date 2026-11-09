@@ -9,10 +9,12 @@ void P0S_Scene::init() {
 
 	explosionForceGenerator = forceRegistry->create<ExplosionForceGenerator>(Vector3(0.0f, 0.0f, 0.0f), 60000.0f, 1000.0f, 1.0f);
 	gravityForceGenerator = forceRegistry->create<GravityForceGenerator>(GRAVITY * 4);
+	//windForceGenerator = forceRegistry->create<WindForceGenerator>(Vector3(80.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 0.0f), 50.0f, 0.5f);
+	whirlwindForceGenerator = forceRegistry->create<WhirlwindForceGenerator>(Vector3(0.0f, 0.0f, 0.0f), 30.0f, 5.0f, 150.0f, 300.0f, 100.0, 0.1);
 
 	generator = new Generator(0.001f, 0.0f, 0.001f,		// Intervalo de generación, media y desviación de la velocidad
 		Vector3(0.0f, 0.0f, 0.0f), 0.01f, 0.1f, 0.1f, 	// Dirección y desviación de la dirección
-		-1.0f, 0.01f, 									// Media y desviación de la vida de la partícula
+		1.5f, 0.01f, 									// Media y desviación de la vida de la partícula
 		Vector3(0.0f, 1.0f, 0.0f), 6.0f, 6.0f, 6.0f, 	// Origen y desviación de la posición
 		10.0f, 0.97f,									// Masa y amortiguamiento
 		Vector3(0.0f), 0.01f, 0.01f, 0.01f,				// Aceleración y desviación de la aceleración
@@ -60,9 +62,11 @@ void P0S_Scene::keyPress(unsigned char key, const physx::PxTransform& cameraTran
 	}
 	if (key == 'e') {
 		explosionForceGenerator->trigger();
-		gravityForceGenerator->triggerGravity();
 	}
 	if (key == 'g') {
+		gravityForceGenerator->triggerGravity();
+	}
+	if (key == 't') {
 		generator->triggerSpawn();
 	}
 }

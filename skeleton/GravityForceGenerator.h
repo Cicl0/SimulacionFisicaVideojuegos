@@ -17,5 +17,5 @@ public:
 
 private:
     Vector3 gravity;
-	bool active = false;
+	bool active = true;
 };

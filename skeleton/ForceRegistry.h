@@ -12,7 +12,7 @@ class Generator;
 class ForceRegistry
 {
 public:
-    // Crea un generador de fuerzas de tipo T, lo guarda y devuelve un puntero (no dueño)
+    // Crea un generador de fuerzas de tipo T, lo guarda y devuelve un puntero
     template <class T, class... Args>
     T* create(Args&&... args) {
         auto g = std::make_unique<T>(std::forward<Args>(args)...);

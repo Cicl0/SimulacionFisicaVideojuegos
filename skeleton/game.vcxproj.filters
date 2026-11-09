@@ -17,11 +17,22 @@
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Generator.cpp" />
-    <ClCompile Include="ForceGenerator.cpp" />
-    <ClCompile Include="ForceRegistry.cpp" />
-    <ClCompile Include="ExplosionForceGenerator.cpp" />
-    <ClCompile Include="GravityForceGenerator.cpp" />
-    <ClCompile Include="WindForceGenerator.cpp" />
+    <ClCompile Include="GravityForceGenerator.cpp">
+      <Filter>ForceGenerators</Filter>
+    </ClCompile>
+    <ClCompile Include="ExplosionForceGenerator.cpp">
+      <Filter>ForceGenerators</Filter>
+    </ClCompile>
+    <ClCompile Include="ForceGenerator.cpp">
+      <Filter>ForceGenerators</Filter>
+    </ClCompile>
+    <ClCompile Include="ForceRegistry.cpp">
+      <Filter>ForceGenerators</Filter>
+    </ClCompile>
+    <ClCompile Include="WindForceGenerator.cpp">
+      <Filter>ForceGenerators</Filter>
+    </ClCompile>
+    <ClCompile Include="WhirlwindForceGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -41,15 +52,29 @@
     <ClInclude Include="Particle.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Generator.h" />
-    <ClInclude Include="ForceGenerator.h" />
-    <ClInclude Include="ForceRegistry.h" />
-    <ClInclude Include="ExplosionForceGenerator.h" />
-    <ClInclude Include="GravityForceGenerator.h" />
-    <ClInclude Include="WindForceGenerator.h" />
+    <ClInclude Include="GravityForceGenerator.h">
+      <Filter>ForceGenerators</Filter>
+    </ClInclude>
+    <ClInclude Include="ForceRegistry.h">
+      <Filter>ForceGenerators</Filter>
+    </ClInclude>
+    <ClInclude Include="ExplosionForceGenerator.h">
+      <Filter>ForceGenerators</Filter>
+    </ClInclude>
+    <ClInclude Include="ForceGenerator.h">
+      <Filter>ForceGenerators</Filter>
+    </ClInclude>
+    <ClInclude Include="WindForceGenerator.h">
+      <Filter>ForceGenerators</Filter>
+    </ClInclude>
+    <ClInclude Include="WhirlwindForceGenerator.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">
       <UniqueIdentifier>{d04b4f9f-5a69-465e-8070-25c6d0bcd3c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ForceGenerators">
+      <UniqueIdentifier>{a81ae6b6-1713-4ee6-9a17-29835d01d859}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
