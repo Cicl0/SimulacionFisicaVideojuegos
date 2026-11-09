@@ -7,13 +7,7 @@ class ForceGenerator
 public:
 	ForceGenerator() = default;
 
-	virtual void updateForce(double dt) = 0;
-
-	void addParticle(Particle* p) { particles.push_back(p); }
-
-	void removeParticle(Particle* p) {
-		particles.erase(std::remove(particles.begin(), particles.end(), p), particles.end());
-	}
+	virtual void updateForce(const std::vector<Particle*>& particles, double dt) = 0;
 
 protected:
 	std::vector<Particle*> particles;

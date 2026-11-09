@@ -27,8 +27,8 @@ private:
 	float simulatedSpeed = 350.0f;
 	std::vector<Bullet*> bullets;
 	Generator* generator;
+	ForceRegistry* forceRegistry;
 	ExplosionForceGenerator* explosionForceGenerator;
 	GravityForceGenerator* gravityForceGenerator;
-
 };
 
