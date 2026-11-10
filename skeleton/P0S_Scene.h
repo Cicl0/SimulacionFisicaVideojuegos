@@ -8,6 +8,7 @@
 #include "GravityForceGenerator.h"
 #include "WindForceGenerator.h"
 #include "WhirlwindForceGenerator.h"
+#include <imgui.h>
 
 class P0S_Scene : public Scene
 {
@@ -22,6 +23,8 @@ public:
 
 	void keyPress(unsigned char key, const physx::PxTransform& cameraTransform) override;
 
+	void drawUI();
+
 private:
 	physx::PxTransform m_transform;
 	RenderItem* m_renderItem{ nullptr };
@@ -29,10 +32,14 @@ private:
 	float simulatedSpeed = 350.0f;
 	std::vector<Bullet*> bullets;
 	Generator* generator;
+
 	ForceRegistry* forceRegistry;
+
 	ExplosionForceGenerator* explosionForceGenerator;
 	GravityForceGenerator* gravityForceGenerator;
 	WindForceGenerator* windForceGenerator;
 	WhirlwindForceGenerator* whirlwindForceGenerator;
+
+	std::vector<ForceGenerator*> fgList;
 };
 

@@ -1,4 +1,4 @@
-// This code contains NVIDIA Confidential Information and is disclosed to you
+﻿// This code contains NVIDIA Confidential Information and is disclosed to you
 // under a form of NVIDIA software license agreement provided separately to you.
 //
 // Notice
@@ -48,6 +48,7 @@
 #error platform not supported.
 #endif
 #include <string>
+#include <functional>
 
 extern std::string display_text;
 
@@ -61,6 +62,8 @@ void renderShape(const physx::PxShape& shape, const physx::PxTransform& transfor
 void renderActors(physx::PxRigidActor** actors, const physx::PxU32 numActors, bool shadows = false, const physx::PxVec4 & color = physx::PxVec4(0.0f, 0.75f, 0.0f, 1.0f));
 void finishRender();
 void drawText(const std::string& text, int x, int y);
+
+void setUICallback(std::function<void()> cb);
 }
 
 #define MAX_NUM_ACTOR_SHAPES 128

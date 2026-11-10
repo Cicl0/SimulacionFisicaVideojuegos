@@ -17,6 +17,13 @@ Particle::Particle(Vector3 p = { 0.0f, 0.0f, 0.0f }, Vector3 v = {0.0f, 0.0f, 0.
 	renderItem = new RenderItem(shape, &pos, Vector4(0.0f, 1.0f, 0.0f, 1.0f));
 }
 
+Particle::~Particle() {
+	if (renderItem) {
+		renderItem->release();   // deregistra y destruye
+		renderItem = nullptr;
+	}
+}
+
 void Particle::integrate(double t) {
 	// a = a_propia + F/m
 	Vector3 totalAcc = acc + force * getInverseMass();

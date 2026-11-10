@@ -1,9 +1,10 @@
-#include <vector>
+﻿#include <vector>
 
 #include "PxPhysicsAPI.h"
 
 #include "core.hpp"
 #include "RenderUtils.hpp"
+#include "imgui_impl_glut.h" 
 
 
 using namespace physx;
@@ -49,6 +50,8 @@ namespace
 
 void motionCallback(int x, int y)
 {
+	ImGui_ImplGLUT_MotionFunc(x, y);
+	if (ImGui::GetIO().WantCaptureMouse) return;
 	sCamera->handleMotion(x, y);
 }
 
@@ -63,9 +66,14 @@ void keyboardCallback(unsigned char key, int x, int y)
 
 void mouseCallback(int button, int state, int x, int y)
 {
+	ImGui_ImplGLUT_MouseFunc(button, state, x, y);
+	if (ImGui::GetIO().WantCaptureMouse) return;   // el ratón está sobre la UI: no mover cámara
 	sCamera->handleMouse(button, state, x, y);
 }
-
+void passiveMotionCallback(int x, int y)
+{
+	ImGui_ImplGLUT_MotionFunc(x, y);
+}
 void idleCallback()
 {
 	glutPostRedisplay();

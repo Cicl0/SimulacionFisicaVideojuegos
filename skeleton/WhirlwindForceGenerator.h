@@ -15,6 +15,23 @@ public:
     void setLift(double l) { lift = l; }
     void setHeight(double h) { height = h; }
 
+    const char* name() const override { return "Torbellino"; }
+
+    void drawUI() override {
+        // El torbellino no usa windVelocity, así que dibujamos los campos comunes a mano
+        ImGui::Checkbox("Activo", &active);
+        ImGui::DragFloat3("Centro", &center.x, 1.0f);
+        ImGui::DragScalar("Radio", ImGuiDataType_Double, &radius, 0.5f);
+        ImGui::DragScalar("k1", ImGuiDataType_Double, &k1, 0.01f);
+        ImGui::DragScalar("k2", ImGuiDataType_Double, &k2, 0.001f);
+
+        ImGui::SeparatorText("Torbellino");
+        ImGui::DragScalar("Omega (rad/s)", ImGuiDataType_Double, &omega, 0.1f);
+        ImGui::Text("= %.2f vueltas/s", omega / (2.0 * 3.14159265));
+        ImGui::DragScalar("Lift (m/s)", ImGuiDataType_Double, &lift, 0.5f);
+        ImGui::DragScalar("Altura (m)", ImGuiDataType_Double, &height, 1.0f);
+    }
+
 protected:
     Vector3 windVelocityAt(const Vector3& pos) const override {
         Vector3 d = pos - center;

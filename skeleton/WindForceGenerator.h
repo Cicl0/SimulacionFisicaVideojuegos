@@ -26,6 +26,19 @@ public:
     void setK1(double v) { k1 = v; }
     void setK2(double v) { k2 = v; }
 
+    void triggerWind() { active = !active; }
+
+    const char* name() const override { return "Viento"; }
+
+    void drawUI() override {
+        ImGui::Checkbox("Activo", &active);
+        ImGui::DragFloat3("Velocidad viento", &windVelocity.x, 0.5f);
+        ImGui::DragFloat3("Centro", &center.x, 1.0f);
+        ImGui::DragScalar("Radio", ImGuiDataType_Double, &radius, 0.5f);
+        ImGui::DragScalar("k1", ImGuiDataType_Double, &k1, 0.01f);
+        ImGui::DragScalar("k2", ImGuiDataType_Double, &k2, 0.001f, nullptr, nullptr, "%.5f");
+    }
+
 protected:
     // Zona de influencia: esfera de centro 'center' y radio 'radius'
     virtual bool isInside(const Vector3& pos) const { return (pos - center).magnitude() < radius; }
@@ -37,5 +50,6 @@ protected:
     Vector3 center;
     double radius;
     double k1, k2;
+    bool active = true;
 };
 

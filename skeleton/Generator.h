@@ -25,6 +25,10 @@ public:
 
 	const std::vector<Particle*>& getParticles() const { return particles; }
 
+	const int getNumParticles() const { return numParticles; }
+
+	const int getAliveParticles() const { return std::count_if(particles.begin(), particles.end(), [](Particle* p) { return p->isAlive(); }); }
+
 	void triggerSpawn() { spawn = !spawn; }
 
 private:

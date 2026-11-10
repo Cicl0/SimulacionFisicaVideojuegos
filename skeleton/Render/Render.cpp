@@ -1,4 +1,4 @@
-// This code contains NVIDIA Confidential Information and is disclosed to you
+﻿// This code contains NVIDIA Confidential Information and is disclosed to you
 // under a form of NVIDIA software license agreement provided separately to you.
 //
 // Notice
@@ -28,6 +28,10 @@
 // Copyright (c) 2001-2004 NovodeX AG. All rights reserved.  
 
 #include "Render.h"
+#include "imgui.h"
+#include "imgui_impl_glut.h"
+#include "imgui_impl_opengl2.h"
+#include <functional>
 #include <assert.h>
 
 using namespace physx;
@@ -231,11 +235,14 @@ void renderGeometry(const PxGeometryHolder& h, bool wireframe =false)
 
 namespace Snippets
 {
+	static std::function<void()> gUICallback;
 
+	void Snippets::setUICallback(std::function<void()> cb) { gUICallback = cb; }
 namespace
 {
 void reshapeCallback(int width, int height)
 {
+	ImGui_ImplGLUT_ReshapeFunc(width, height);
 	glViewport(0, 0, width, height);
 }
 }
@@ -254,6 +261,13 @@ void setupDefaultWindow(const char *name)
 	int mainHandle = glutCreateWindow(name);
 	glutSetWindow(mainHandle);
 	glutReshapeFunc(reshapeCallback);
+
+	// --- Dear ImGui ---
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGui::StyleColorsDark();
+	ImGui_ImplGLUT_Init();
+	ImGui_ImplOpenGL2_Init();
 	
 	delete[] namestr;
 }
@@ -379,6 +393,15 @@ void renderActors(PxRigidActor** actors, const PxU32 numActors, bool shadows, co
 
 void finishRender()
 {
+	ImGui_ImplOpenGL2_NewFrame();
+	ImGui_ImplGLUT_NewFrame();
+	ImGui::NewFrame();
+
+	if (gUICallback) gUICallback();      // aquí se dibuja el panel de la escena
+
+	ImGui::Render();
+	ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
+
 	glutSwapBuffers();
 }
 
