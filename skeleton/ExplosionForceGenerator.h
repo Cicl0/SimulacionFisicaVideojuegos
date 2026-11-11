@@ -14,7 +14,7 @@ public:
 
     void updateForce(const std::vector<Particle*>& particles, double dt) override;
 
-    const char* name() const override { return "Explosión"; }
+    const char* name() const override { return "Explosion"; }
 
     void drawUI() override {
         ImGui::DragFloat3("Centro", &center.x, 1.0f);

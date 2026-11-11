@@ -34,6 +34,7 @@ public:
 
 protected:
     Vector3 windVelocityAt(const Vector3& pos) const override {
+		if (!active) return Vector3(0.0f);
         Vector3 d = pos - center;
         return Vector3(static_cast<float>(-omega * d.z),
             static_cast<float>(lift * (1.0 - d.y / height)),

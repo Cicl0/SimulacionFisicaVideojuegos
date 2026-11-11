@@ -5,9 +5,9 @@
 #include <memory>
 
 #include "ForceGenerator.h"
-#include "Generator.h"
+#include "ParticleSystem.h"
 
-class Generator;
+class ParticleSystem;
 
 class ForceRegistry
 {
@@ -21,14 +21,14 @@ public:
         return raw;
     }
 
-    // La fuerza fg actuará sobre todas las partículas (presentes y futuras) de gen
-    void bind(ForceGenerator* fg, Generator* gen);
+    // La fuerza fg actuará sobre todas las partículas (presentes y futuras) de ps
+    void bind(ForceGenerator* fg, ParticleSystem* ps);
 
-    // Enlaza TODOS los generadores de fuerzas existentes con gen
-    void bindAll(Generator* gen);
+    // Enlaza TODOS los generadores de fuerzas existentes con ps
+    void bindAll(ParticleSystem* ps);
 
     // Llamar si un Generator va a destruirse, para no dejar punteros colgantes
-    void removeGenerator(Generator* gen);
+    void removeParticleSystem(ParticleSystem* ps);
 
     // Una vez por frame, ANTES de gen.integrate(dt)
     // Cada generador de fuerzas recibe de golpe las partículas de todos los
@@ -38,7 +38,7 @@ public:
     void clear() { bindings.clear(); forceGens.clear(); }
 
 private:
-    struct Binding { ForceGenerator* fg; Generator* gen; };
+    struct Binding { ForceGenerator* fg; ParticleSystem* ps; };
 
     std::vector<std::unique_ptr<ForceGenerator>> forceGens;
     std::vector<Binding> bindings;

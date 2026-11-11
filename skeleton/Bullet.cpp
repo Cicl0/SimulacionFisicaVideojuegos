@@ -7,6 +7,8 @@ void
 Bullet::init() {
 	simulateMass();
 	simulateGravity();
+
+	renderItem->color = Vector4(1.0f, 0.0f, 0.0f, 1.0f);
 }
 
 void 

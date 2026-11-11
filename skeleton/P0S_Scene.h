@@ -2,12 +2,18 @@
 
 #include "Scene.h"
 #include "RenderUtils.hpp"
+
 #include "Bullet.h"
+
+#include "ParticleSystem.h"
 #include "Generator.h"
+
+#include "ForceRegistry.h"
 #include "ExplosionForceGenerator.h"
 #include "GravityForceGenerator.h"
 #include "WindForceGenerator.h"
 #include "WhirlwindForceGenerator.h"
+
 #include <imgui.h>
 
 class P0S_Scene : public Scene
@@ -31,6 +37,8 @@ private:
 
 	float simulatedSpeed = 350.0f;
 	std::vector<Bullet*> bullets;
+
+	ParticleSystem* particleSystem;
 	Generator* generator;
 
 	ForceRegistry* forceRegistry;

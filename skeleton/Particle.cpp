@@ -1,7 +1,8 @@
 ﻿#include "Particle.h"
 #include <cmath> 
 
-Particle::Particle(Vector3 p = { 0.0f, 0.0f, 0.0f }, Vector3 v = {0.0f, 0.0f, 0.0f}, Vector3 a = {0.0f, 0.0f, 0.0f}, float m = 0, float d = 0, float lt = -1.0f) :
+Particle::Particle(Vector3 p = { 0.0f, 0.0f, 0.0f }, Vector3 v = {0.0f, 0.0f, 0.0f}, Vector3 a = {0.0f, 0.0f, 0.0f}, 
+	float m = 0, float d = 0, float lt = -1.0f, Vector4 c) :
 	pos(p),
 	vel(v),
 	acc(a),
@@ -14,7 +15,7 @@ Particle::Particle(Vector3 p = { 0.0f, 0.0f, 0.0f }, Vector3 v = {0.0f, 0.0f, 0.
 	else damp = d;
 
 	physx::PxShape* shape = CreateShape(physx::PxSphereGeometry(2.0f));
-	renderItem = new RenderItem(shape, &pos, Vector4(0.0f, 1.0f, 0.0f, 1.0f));
+	renderItem = new RenderItem(shape, &pos, c);
 }
 
 Particle::~Particle() {

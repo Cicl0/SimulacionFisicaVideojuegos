@@ -1,8 +1,6 @@
 ﻿#pragma once
 
 #include "Particle.h"
-#include "ForceGenerator.h"
-#include "ForceRegistry.h"
 
 # include <random>
 
@@ -11,13 +9,14 @@ class ForceRegistry;
 class Generator
 {
 public:
-	Generator(float inter, float velMed, float velDev,			  // Intervalo de generación, media y desviación de la velocidad
-		Vector3 dir, float dirVarX, float dirVarY, float dirVarZ, // Dirección y desviación de la dirección
-		float liveMed, float liveDev,							  // Media y desviación de la vida de la partícula
-		Vector3 origin, float varX, float varY, float varZ,       // Origen y desviación de la posición
-		float m, float d,										  // Masa y amortiguamiento
-		Vector3 acc, float accVarX, float accVarY, float accVarZ, // Aceleración y desviación de la aceleración
-		int numPart);											  // Maximo de particulas a generar (-1 = sin limite)
+	Generator(const Particle& base,
+		float inter,												// Intervalo de generación
+		float velVarX, float velVarY, float velVarZ,				// Desviación de la velocidad
+		float liveDev,												// Desviación de la vida
+		float varX, float varY, float varZ,							// Desviación de la posición
+		float accVarX, float accVarY, float accVarZ,				// Desviación de la aceleración
+		int maxPart);												// Máximo de partículas vivas a la vez (-1 = sin límite)
+	~Generator();
 
 	void integrate(double t);
 
@@ -25,35 +24,36 @@ public:
 
 	const std::vector<Particle*>& getParticles() const { return particles; }
 
-	const int getNumParticles() const { return numParticles; }
+	// --- Getters y setters --- (principalmente para la UI)
+	const int getMaxParticles() const { return maxParticles; }
 
-	const int getAliveParticles() const { return std::count_if(particles.begin(), particles.end(), [](Particle* p) { return p->isAlive(); }); }
+	const int getAliveParticles() const { return aliveParticles; }
+
+	bool isSpawning() const { return spawn; }
 
 	void triggerSpawn() { spawn = !spawn; }
 
+	float getInterval() const { return interval; }
+	void setInterval(float i) { interval = (i > 0.001f) ? i : 0.001f; }
+
+	float getLifeMean() const { return liveMean; }
+	void setLifeMean(float l) { liveMean = (l > 0.1f) ? l : 0.1f; }
+
 private:
-	std::default_random_engine generator;
-	std::normal_distribution<float> lifetime_dist;
-	std::normal_distribution<float> velocity_dist;
+	std::default_random_engine gen;
+	std::normal_distribution<float> normal;
 
-	std::normal_distribution<float> direction_dist_X;
-	std::normal_distribution<float> direction_dist_Y;
-	std::normal_distribution<float> direction_dist_Z;
-
-	std::normal_distribution<float> acceleration_dist_X;
-	std::normal_distribution<float> acceleration_dist_Y;
-	std::normal_distribution<float> acceleration_dist_Z;
-
-	std::normal_distribution<float> position_dist_X;
-	std::normal_distribution<float> position_dist_Y;
-	std::normal_distribution<float> position_dist_Z;
-
-	Vector3 direction;
-
+	// Valores medios (copiados de la partícula base) y desviaciones
+	Vector3 origin, posDev;
+	Vector3 velocity, velDev;
+	Vector3 acceleration, accDev;
+	float liveMean, liveDev;
 	float mass, damp;
+	Vector4 color;
 
 	std::vector<Particle*> particles;
-	int numParticles;
+	int maxParticles;
+	int aliveParticles = 0;
 
 	float interval;
 	float timeSinceLastGeneration = 0.0f;
