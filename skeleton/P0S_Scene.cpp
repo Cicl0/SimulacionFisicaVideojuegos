@@ -1,43 +1,111 @@
 ﻿#include "P0S_Scene.h"
 
 #include <PxPhysicsAPI.h>
+#include <iostream>
 
 using namespace physx;
 
 void P0S_Scene::init() {
 	forceRegistry = new ForceRegistry();
 
-	explosionForceGenerator = forceRegistry->create<ExplosionForceGenerator>(Vector3(0.0f, 0.0f, 0.0f), 60000.0f, 1000.0f, 1.0f);
+	explosionForceGenerator = forceRegistry->create<ExplosionForceGenerator>(Vector3(60.0f, 0.0f, 0.0f), 60000.0f, 1000.0f, 1.0f);
 	fgList.push_back(explosionForceGenerator);
 
-	gravityForceGenerator = forceRegistry->create<GravityForceGenerator>(GRAVITY * 4);
+	gravityForceGenerator = forceRegistry->create<GravityForceGenerator>(GRAVITY * 8);
 	fgList.push_back(gravityForceGenerator);
 
-	windForceGenerator = forceRegistry->create<WindForceGenerator>(Vector3(80.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 0.0f), 50.0f, 0.5f);
+	windForceGenerator = forceRegistry->create<WindForceGenerator>(Vector3(0.0f, 0.0f, 700.0f), Vector3(0.0f, 0.0f, 0.0f), 20000.0f, 60.0f);
 	fgList.push_back(windForceGenerator);
 
-	whirlwindForceGenerator = forceRegistry->create<WhirlwindForceGenerator>(Vector3(0.0f, 0.0f, 0.0f), 30.0f, 5.0f, 150.0f, 300.0f, 100.0, 0.1);
+	whirlwindForceGenerator = forceRegistry->create<WhirlwindForceGenerator>(Vector3(180.0f, 0.0f, 0.0f), 30.0f, 5.0f, 150.0f, 300.0f, 100.0, 0.1);
 	fgList.push_back(whirlwindForceGenerator);
 
-	particleSystem = new ParticleSystem();
+	manguera = new ParticleSystem();
 
-	Particle bala(Vector3(0.0f, 1.0f, 0.0f),	// Origen
+	Particle particle(Vector3(0.0f, 1.0f, 0.0f),	// Origen
+		Vector3(0.0f, 80.0f, 0.0f),	// Velocidad (módulo 0)
+		Vector3(0.0f),				// Aceleración
+		10.0f, 0.97f,				// Masa y amortiguamiento
+		1.5f,
+		Vector4(0.0f, 0.0f, 1.0f, 1.0f));						// Vida
+
+	// Chorro de agua
+	generator = new Generator(particle,
+		0.01f,							// Intervalo de generación
+		3.0f, 0.001f, 3.0f,			// Desviación de la velocidad
+		0.01f,							// Desviación de la vida
+		1.0f, 1.0f, 1.0f,				// Desviación de la posición
+		0.01f, 0.01f, 0.01f,			// Desviación de la aceleración
+		5000);							// Máximo de partículas vivas
+
+	bomba = new ParticleSystem();
+
+	Particle particle2(Vector3(60.0f, 1.0f, 0.0f),	// Origen
 		Vector3(0.0f, 0.0f, 0.0f),	// Velocidad (módulo 0)
 		Vector3(0.0f),				// Aceleración
 		10.0f, 0.97f,				// Masa y amortiguamiento
-		1.5f);						// Vida
+		1.5f,
+		Vector4(1.0f, 0.0f, 0.0f, 1.0f));						// Vida
 
-	generator = new Generator(bala,
-		0.001f,							// Intervalo de generación
+	// Explosion 
+	Generator* generator_2 = new Generator(particle2,
+		0.01f,							// Intervalo de generación
 		0.001f, 0.001f, 0.001f,			// Desviación de la velocidad
 		0.01f,							// Desviación de la vida
 		6.0f, 6.0f, 6.0f,				// Desviación de la posición
 		0.01f, 0.01f, 0.01f,			// Desviación de la aceleración
 		5000);							// Máximo de partículas vivas
 
-	particleSystem->addGenerator(generator);
+	viento = new ParticleSystem();
 
-	forceRegistry->bindAll(particleSystem);
+	Particle particle3(Vector3(120.0f, 1.0f, 0.0f),	// Origen
+		Vector3(0.0f, 0.0f, 0.0f),	// Velocidad (módulo 0)
+		Vector3(0.0f),				// Aceleración
+		10.0f, 0.97f,				// Masa y amortiguamiento
+		1.5f,
+		Vector4(1.0f, 0.0f, 1.0f, 1.0f));						// Vida
+
+	// Viento 
+	Generator* generator_3 = new Generator(particle3,
+		10.01f,							// Intervalo de generación
+		0.001f, 0.001f, 0.001f,			// Desviación de la velocidad
+		0.01f,							// Desviación de la vida
+		6.0f, 6.0f, 6.0f,				// Desviación de la posición
+		0.01f, 0.01f, 0.01f,			// Desviación de la aceleración
+		5000);							// Máximo de partículas vivas
+
+	torbellino = new ParticleSystem();
+
+	Particle particle4(Vector3(180.0f, 1.0f, 0.0f),	// Origen
+		Vector3(0.0f, 0.0f, 0.0f),	// Velocidad (módulo 0)
+		Vector3(0.0f),				// Aceleración
+		10.0f, 0.97f,				// Masa y amortiguamiento
+		1.5f,
+		Vector4(0.0f, 1.0f, 0.0f, 1.0f));						// Vida
+
+	// Torbellino
+	Generator* generator_4 = new Generator(particle4,
+		0.01f,							// Intervalo de generación
+		0.001f, 0.001f, 0.001f,			// Desviación de la velocidad
+		0.01f,							// Desviación de la vida
+		6.0f, 6.0f, 6.0f,				// Desviación de la posición
+		0.01f, 0.01f, 0.01f,			// Desviación de la aceleración
+		5000);							// Máximo de partículas vivas
+
+	manguera->addGenerator(generator);
+	bomba->addGenerator(generator_2);
+	viento->addGenerator(generator_3);
+	torbellino->addGenerator(generator_4);
+
+	particleSystems.push_back(manguera);
+	particleSystems.push_back(bomba);
+	particleSystems.push_back(viento);
+	particleSystems.push_back(torbellino);
+
+	forceRegistry->bind(gravityForceGenerator, manguera);
+	forceRegistry->bind(explosionForceGenerator, bomba);
+	forceRegistry->bind(windForceGenerator, viento);
+	forceRegistry->bind(whirlwindForceGenerator, torbellino);
 
 	Snippets::setUICallback([this]() { drawUI(); });
 }
@@ -47,7 +115,10 @@ void
 	for (auto bullet : bullets) {
 		bullet->integrate(dt);
 	}
-	particleSystem->integrate(dt);
+	manguera->integrate(dt);
+	bomba->integrate(dt);
+	viento->integrate(dt);
+	torbellino->integrate(dt);
 	
 	forceRegistry->updateForce(dt);
 }
@@ -136,32 +207,45 @@ P0S_Scene::drawUI() {
 		}
 
 		if (ImGui::BeginTabItem("Generadores")) {
-			const auto& generators = particleSystem->getGenerators();
+			for (size_t j = 0; j < particleSystems.size(); ++j) {
+				auto& ps = particleSystems[j];
+				auto& generators = ps->getGenerators();
 
-			for (size_t i = 0; i < generators.size(); ++i) {
-				Generator* gen = generators[i];
+				ImGui::PushID((int)j);   // ID único por sistema de partículas
 
-				ImGui::PushID((int)i);   // IDs únicos por generador
+				std::string sysTitle = "Sistema " + std::to_string(j);
+				if (ImGui::CollapsingHeader(sysTitle.c_str(), ImGuiTreeNodeFlags_DefaultOpen)) {
 
-				std::string title = "Generador " + std::to_string(i);
-				if (ImGui::CollapsingHeader(title.c_str(), ImGuiTreeNodeFlags_DefaultOpen)) {
+					for (size_t i = 0; i < generators.size(); ++i) {
+						Generator* gen = generators[i];
 
-					bool spawning = gen->isSpawning();
-					if (ImGui::Checkbox("Activo", &spawning))
-						gen->triggerSpawn();
+						ImGui::PushID((int)i);   // ID único por generador dentro del sistema
 
-					ImGui::Text("Partículas: %d", gen->getMaxParticles());
-					ImGui::Text("Partículas vivas: %d", gen->getAliveParticles());
+						std::string title = "Generador " + std::to_string(i);
+						if (ImGui::TreeNodeEx(title.c_str(), ImGuiTreeNodeFlags_DefaultOpen)) {
 
-					// Intervalo entre generaciones
-					float interval = gen->getInterval();
-					if (ImGui::SliderFloat("Intervalo (s)", &interval, 0.001f, 1.0f, "%.3f", ImGuiSliderFlags_Logarithmic))
-						gen->setInterval(interval);
+							bool spawning = gen->isSpawning();
+							if (ImGui::Checkbox("Activo", &spawning))
+								gen->triggerSpawn();
 
-					// Vida media de las partículas nuevas
-					float life = gen->getLifeMean();
-					if (ImGui::SliderFloat("Vida media (s)", &life, 0.1f, 20.0f, "%.2f"))
-						gen->setLifeMean(life);
+							ImGui::Text("Partículas: %d", gen->getMaxParticles());
+							ImGui::Text("Partículas vivas: %d", gen->getAliveParticles());
+
+							// Intervalo entre generaciones
+							float interval = gen->getInterval();
+							if (ImGui::SliderFloat("Intervalo (s)", &interval, 0.001f, 1.0f, "%.3f", ImGuiSliderFlags_Logarithmic))
+								gen->setInterval(interval);
+
+							// Vida media de las partículas nuevas
+							float life = gen->getLifeMean();
+							if (ImGui::SliderFloat("Vida media (s)", &life, 0.1f, 20.0f, "%.2f"))
+								gen->setLifeMean(life);
+
+							ImGui::TreePop();
+						}
+
+						ImGui::PopID();
+					}
 				}
 
 				ImGui::PopID();

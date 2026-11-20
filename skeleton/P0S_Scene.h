@@ -38,8 +38,13 @@ private:
 	float simulatedSpeed = 350.0f;
 	std::vector<Bullet*> bullets;
 
-	ParticleSystem* particleSystem;
+	ParticleSystem* manguera;
+	ParticleSystem* bomba;
+	ParticleSystem* viento;
+	ParticleSystem* torbellino;
 	Generator* generator;
+
+	std::vector<ParticleSystem*> particleSystems;
 
 	ForceRegistry* forceRegistry;
 
